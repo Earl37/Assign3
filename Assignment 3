@@ -1,0 +1,15 @@
+import pandas as pd
+
+# Correctly formatted file path (with raw string to handle backslashes)
+file_path = r"C:\Users\arubombora\.vscode\Policy_Holder.csv"
+
+# Read the CSV file
+try:
+    df = pd.read_csv(file_path)
+    print("CSV file loaded successfully.")
+    print(df.head())  # Display the first 5 rows
+except FileNotFoundError:
+    print(f"File not found: {file_path}")
+except Exception as e:
+    print(f"An error occurred: {e}")
+

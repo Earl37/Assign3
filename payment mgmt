@@ -1,0 +1,63 @@
+class Payment:
+    """Class to represent a payment made by a policyholder."""
+    
+    def __init__(self, payment_id, holder_id, product_id, amount, date, status="Pending"):
+        self.payment_id = payment_id
+        self.holder_id = holder_id
+        self.product_id = product_id
+        self.premium = amount
+        self.date = date  # Date of payment
+        self.status = status  # Status can be "Pending", "Completed", "Overdue"
+
+    def __repr__(self):
+        return (f"Payment(ID: {self.payment_id}, HolderID: {self.holder_id}, "
+                f"ProductID: {self.product_id}, Amount: {self.premium}, "
+                f"Date: {self.date}, Status: {self.status})")
+
+    def process_payment(self):
+        """Process the payment and mark it as completed."""
+        if self.status == "Pending":
+            self.status = "Completed"
+            print(f"Payment ID {self.payment_id} has been successfully processed.")
+        elif self.status == "Completed":
+            print(f"Payment ID {self.payment_id} has already been processed.")
+        else:
+            print(f"Payment ID {self.payment_id} cannot be processed. Current status: {self.status}.")
+
+    def send_reminder(self):
+        """Send a reminder for pending payments."""
+        if self.status == "Pending":
+            print(f"Reminder: Payment ID {self.payment_id} is still pending.")
+        elif self.status == "Completed":
+            print(f"Payment ID {self.payment_id} has already been completed. No reminder needed.")
+        else:
+            print(f"No reminder sent. Payment ID {self.payment_id} is marked as '{self.status}'.")
+
+    def calculate_penalty(self, current_date, penalty_rate_per_day):
+        """
+        Calculate the penalty for overdue payments.
+        
+        Parameters:
+            current_date (datetime.date): The current date.
+            penalty_rate_per_day (float): The daily penalty rate as a percentage of the amount.
+        """
+        from datetime import datetime
+        
+        if self.status == "Pending":
+            # Convert strings to date objects for calculation
+            payment_date = datetime.strptime(self.date, "%Y-%m-%d").date()
+            overdue_days = (current_date - payment_date).days
+            
+            if overdue_days > 0:
+                penalty = self.premium * (penalty_rate_per_day / 100) * overdue_days
+                print(f"Payment ID {self.payment_id} is overdue by {overdue_days} days. Penalty: ${penalty:.2f}.")
+                return penalty
+            else:
+                print(f"Payment ID {self.payment_id} is not overdue. No penalty applied.")
+                return 0
+        elif self.status == "Completed":
+            print(f"Payment ID {self.payment_id} has been completed. No penalty applies.")
+            return 0
+        else:
+            print(f"Cannot calculate penalty for Payment ID {self.payment_id}. Status: {self.status}.")
+            return 0

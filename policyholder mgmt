@@ -1,0 +1,38 @@
+class PolicyHolder:
+    """Class to represent a policyholder."""
+
+    def __init__(self, holder_id, name, age, contact):
+        self.holder_id = holder_id
+        self.name = name
+        self.age = age
+        self.contact = contact
+        self.active = True  # Policyholder is active by default
+
+    def __repr__(self):
+        status = "Active" if self.active else "Suspended"
+        return (f"PolicyHolder(ID: {self.holder_id}, Name: {self.name}, "
+                f"Age: {self.age}, Contact: {self.contact}, Status: {status})")
+
+    def register(self, database):
+        """Registers a policyholder to the provided database."""
+        if self.holder_id not in database:
+            database[self.holder_id] = self
+            print(f"PolicyHolder {self.name} (ID: {self.holder_id}) registered successfully.")
+        else:
+            print(f"PolicyHolder {self.holder_id} is already registered.")
+
+    def suspend(self):
+        """Suspends the policyholder."""
+        if self.active:
+            self.active = False
+            print(f"PolicyHolder {self.name} (ID: {self.holder_id}) has been suspended.")
+        else:
+            print(f"PolicyHolder {self.name} (ID: {self.holder_id}) is already suspended.")
+
+    def reactivate(self):
+        """Reactivates the policyholder."""
+        if not self.active:
+            self.active = True
+            print(f"PolicyHolder {self.name} (ID: {self.holder_id}) has been reactivated.")
+        else:
+            print(f"PolicyHolder {self.name} (ID: {self.holder_id}) is already active.")
